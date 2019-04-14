@@ -28,18 +28,19 @@ db.once('open', () => {
 })
 
 app.get('/', (req, res) => {
-  // res.render('home', {restaurants: restaurantList})
-
   restaurantModel.find((err, restaurantList) => {
     if (err) return console.error(err)
     return res.render('home', { restaurants: restaurantList })
   })
 })
 
+// route to add restaurant
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+
 // display the detail of restaurant
 app.get('/restaurants/:id', (req, res) => {
-  // res.render('show', {restaurant: restaurantList[req.params.id - 1]})
-
   restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
     return res.render('show', { restaurant: restaurant })
@@ -47,20 +48,17 @@ app.get('/restaurants/:id', (req, res) => {
 })
 
 // list all restaurant
-app.get('/todos', (req, res) => {
-  res.send('list all Todo')
-})
+// app.get('/todos', (req, res) => {
+  // res.send('list all Todo')
+// })
 
-// route to add restaurant
-app.get('/todos/new', (req, res) => {
-  res.render('new')
-})
+
 
 // Add restaurant
-app.post('/todos', (req, res) => {
-  const newTodo = new Todo({name: req.body.name})
+app.post('/restaurants', (req, res) => {
+  const newRestaurant = new restaurantModel({ name: req.body.name })
 
-  newTodo.save(err => {
+  newRestaurant.save(err => {
     if (err) return console.error(err);
     res.redirect('/')
   })
