@@ -14,7 +14,6 @@ db.on('error', () => {
 db.once('open', () => {
   console.log('mongodb connected!')
 
-  
   for (let i = 0; i < restaurantList.length; i++) {
   		// console.log(restaurantList[i].name)
         restaurantModel.create({id: restaurantList[i].id, 
