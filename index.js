@@ -1,5 +1,6 @@
 const express = require('express')
-const exphbs  = require('express-handlebars');
+const exphbs  = require('express-handlebars')
+const mongoose = require('mongoose')
 const restaurantObj = require('./restaurant.json')
 const restaurantList = restaurantObj.results
 const app = express()
