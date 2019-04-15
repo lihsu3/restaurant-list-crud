@@ -52,8 +52,6 @@ app.get('/restaurants/:id', (req, res) => {
   // res.send('list all Todo')
 // })
 
-
-
 // Add restaurant
 app.post('/restaurants', (req, res) => {
   const newRestaurant = new restaurantModel({ name: req.body.name })
@@ -65,22 +63,22 @@ app.post('/restaurants', (req, res) => {
 })
 
 // route to edit restaurant
-app.get('/todos/:id/edit', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+app.get('/restaurants/:id/edit', (req, res) => {
+  restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
-    return res.render('edit', { todo: todo })
+    return res.render('edit', { restaurant: restaurant })
   })
 })
 
 // edit restaurant
-app.post('/todos/:id', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+app.post('/restaurants/:id', (req, res) => {
+  restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
 
-    todo.name = req.body.name
-    todo.save(err => {
+    restaurant.name = req.body.name
+    restaurant.save(err => {
       if (err) return console.error(err);
-      res.redirect(`/todos/${req.params.id}`)
+      res.redirect(`/restaurants/${req.params.id}`)
     })
   })
 })
