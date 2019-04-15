@@ -84,10 +84,10 @@ app.post('/restaurants/:id', (req, res) => {
 })
 
 // delete restaurant
-app.post('/todos/:id/delete', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
+app.post('/restaurants/:id/delete', (req, res) => {
+  restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
-    todo.remove(err => {
+    restaurant.remove(err => {
       if (err) return console.error(err)
       return res.redirect('/')
     })
