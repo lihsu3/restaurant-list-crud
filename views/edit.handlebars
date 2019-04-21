@@ -1,5 +1,5 @@
 <!-- ./views/edit.handlebars -->
-<form action="/restaurants/{{{restaurant._id}}}" method="POST">
+<form action="/restaurants/{{{restaurant._id}}}?_method=PUT" method="POST">
 	<input type="text" placeholder="nameOfRestaurant" name="name" value="{{{restaurant.name}}}">
 	<button type="submit">Edit</button>
 </form>

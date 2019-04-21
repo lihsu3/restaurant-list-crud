@@ -3,6 +3,7 @@ const exphbs  = require('express-handlebars')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const restaurantModel = require('./models/restaurantModel')
+const methodOverride = require('method-override')
 // const restaurantObj = require('./restaurant.json')
 // const restaurantList = restaurantObj.results
 const app = express()
@@ -12,8 +13,8 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.use(express.static('public'))
-
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(methodOverride('_method'))
 
 mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true })
 
@@ -28,7 +29,7 @@ db.once('open', () => {
 })
 
 app.get('/', (req, res) => {
-  restaurantModel.find((err, restaurantList) => {
+  restaurantModel.find({}).sort({name: 'asc'}).exec((err, restaurantList) => {
     if (err) return console.error(err)
     return res.render('home', { restaurants: restaurantList })
   })
@@ -71,7 +72,7 @@ app.get('/restaurants/:id/edit', (req, res) => {
 })
 
 // edit restaurant
-app.post('/restaurants/:id', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
   restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
 
@@ -84,7 +85,7 @@ app.post('/restaurants/:id', (req, res) => {
 })
 
 // delete restaurant
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id/delete', (req, res) => {
   restaurantModel.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err)
     restaurant.remove(err => {
@@ -95,9 +96,9 @@ app.post('/restaurants/:id/delete', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-	// const keyword = req.query.keyword.toLowerCase()
-	// const searchResults = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword))
-	// res.render('home', {restaurants: searchResults})
+	const keyword = req.query.keyword.toLowerCase()
+	const searchResults = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword))
+	res.render('home', {restaurants: searchResults})
 })
 
 app.listen(port, () => console.log(`listening on port ${port}`))
