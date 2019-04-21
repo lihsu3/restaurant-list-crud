@@ -15,6 +15,8 @@ app.set('view engine', 'handlebars');
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
+app.use('/', require('./routes/home'))
+app.use('/restaurants', require('./routes/restaurant'))
 
 mongoose.connect('mongodb://localhost/restaurant', { useNewUrlParser: true })
 
@@ -28,72 +30,6 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-app.get('/', (req, res) => {
-  restaurantModel.find({}).sort({name: 'asc'}).exec((err, restaurantList) => {
-    if (err) return console.error(err)
-    return res.render('home', { restaurants: restaurantList })
-  })
-})
-
-// route to add restaurant
-app.get('/restaurants/new', (req, res) => {
-  res.render('new')
-})
-
-// display the detail of restaurant
-app.get('/restaurants/:id', (req, res) => {
-  restaurantModel.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err)
-    return res.render('show', { restaurant: restaurant })
-  })
-})
-
-// list all restaurant
-// app.get('/todos', (req, res) => {
-  // res.send('list all Todo')
-// })
-
-// Add restaurant
-app.post('/restaurants', (req, res) => {
-  const newRestaurant = new restaurantModel({ name: req.body.name })
-
-  newRestaurant.save(err => {
-    if (err) return console.error(err);
-    res.redirect('/')
-  })
-})
-
-// route to edit restaurant
-app.get('/restaurants/:id/edit', (req, res) => {
-  restaurantModel.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err)
-    return res.render('edit', { restaurant: restaurant })
-  })
-})
-
-// edit restaurant
-app.put('/restaurants/:id', (req, res) => {
-  restaurantModel.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err)
-
-    restaurant.name = req.body.name
-    restaurant.save(err => {
-      if (err) return console.error(err);
-      res.redirect(`/restaurants/${req.params.id}`)
-    })
-  })
-})
-
-// delete restaurant
-app.delete('/restaurants/:id/delete', (req, res) => {
-  restaurantModel.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err)
-    restaurant.remove(err => {
-      if (err) return console.error(err)
-      return res.redirect('/')
-    })
-  })
-})
 
 app.get('/search', (req, res) => {
 	const keyword = req.query.keyword.toLowerCase()
