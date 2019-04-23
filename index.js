@@ -32,9 +32,18 @@ db.once('open', () => {
 
 
 app.get('/search', (req, res) => {
-	const keyword = req.query.keyword.toLowerCase()
-	const searchResults = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword))
-	res.render('home', {restaurants: searchResults})
+  let order = req.query.order
+  let keyword = req.query.keyword
+  let attBeingSorted = 'name'
+
+  if (order == 'desc') attBeingSorted = '-' + attBeingSorted
+  else if (order == 'category') attBeingSorted = 'category'
+  else if (order == 'location') attBeingSorted = 'location'
+
+  restaurantModel.find({name: {$regex: keyword, $options: "i"}}).sort(attBeingSorted).exec((err, restaurantList) => {
+    if (err) return console.error(err)
+    return res.render('home', {restaurants: restaurantList, keyword: req.query.keyword})
+  })
 })
 
 app.listen(port, () => console.log(`listening on port ${port}`))
