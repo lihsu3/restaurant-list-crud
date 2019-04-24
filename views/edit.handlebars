@@ -1,5 +1,8 @@
 <!-- ./views/edit.handlebars -->
 <form action="/restaurants/{{{restaurant._id}}}?_method=PUT" method="POST">
-	<input type="text" placeholder="nameOfRestaurant" name="name" value="{{{restaurant.name}}}">
+	<input type="text" placeholder="name" name="name" value="{{{restaurant.name}}}">
+	<input type="text" placeholder="category" name="category" value="{{{restaurant.category}}}">
+	<input type="text" placeholder="location" name="location" value="{{{restaurant.location}}}">
+	<input type="text" placeholder="rating" name="rating" value="{{{restaurant.rating}}}">
 	<button type="submit">Edit</button>
 </form>

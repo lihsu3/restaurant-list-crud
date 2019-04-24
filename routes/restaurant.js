@@ -10,7 +10,11 @@ router.get('/new', (req, res) => {
 
 // Add restaurant
 router.post('', (req, res) => {
-  const newRestaurant = new restaurantModel({ name: req.body.name })
+  const newRestaurant = new restaurantModel({ 
+  	name: req.body.name, 
+  	category: req.body.category, 
+  	location: req.body.location, 
+  	rating: req.body.rating })
 
   newRestaurant.save(err => {
     if (err) return console.error(err);
@@ -45,6 +49,9 @@ router.put('/:id', (req, res) => {
     if (err) return console.error(err)
 
     restaurant.name = req.body.name
+	restaurant.category = req.body.category
+	restaurant.location = req.body.location
+	restaurant.rating = req.body.rating
     restaurant.save(err => {
       if (err) return console.error(err);
       res.redirect(`/restaurants/${req.params.id}`)
